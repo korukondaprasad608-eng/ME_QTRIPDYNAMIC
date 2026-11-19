@@ -66,15 +66,69 @@ function addBootstrapPhotoGallery(images) {
 }
 
 function conditionalRenderingOfReservationPanel(adventure) {
+  const available = document.getElementById("reservation-panel-available");
+  const soldOut = document.getElementById("reservation-panel-sold-out");
+
+  if (adventure.available) {
+    available.style.display = "block";
+    soldOut.style.display = "none";
+    document.getElementById("reservation-person-cost").innerHTML =
+      String(adventure.costPerHead);
+  } else {
+    available.style.display = "none";
+    soldOut.style.display = "block";
+  }
 }
 
 function calculateReservationCostAndUpdateDOM(adventure, persons) {
+  document.getElementById("reservation-cost").innerHTML =
+    String(Number(adventure.costPerHead) * Number(persons));
 }
 
 function captureFormSubmit(adventure) {
+  const form = document.getElementById("myForm");
+
+  const submitReservation = async (event) => {
+    if (event && event.preventDefault) event.preventDefault();
+
+    const formData = new FormData(form);
+    const reservation = {
+      name: formData.get("name"),
+      date: formData.get("date"),
+      person: formData.get("person"),
+      adventure: adventure.id,
+    };
+
+    try {
+      const response = await fetch(
+        `${config.backendEndpoint}/reservations/new`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(reservation),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert("Success!");
+        window.location.reload();
+      } else {
+        alert("Failed!");
+      }
+    } catch (error) {
+      alert("Failed!");
+    }
+  };
+
+  form.addEventListener("submit", submitReservation);
+  form.submit = submitReservation;
 }
 
 function showBannerIfAlreadyReserved(adventure) {
+  document.getElementById("reserved-banner").style.display =
+    adventure.reserved ? "block" : "none";
 }
 
 export {
