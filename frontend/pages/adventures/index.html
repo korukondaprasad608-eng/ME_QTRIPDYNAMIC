@@ -143,18 +143,24 @@
 
         //executed when onChange() is triggered on duration filter dropdown
         function selectDuration(event) {
-            // TODO: MODULE_FILTERS
-            // 1. Change the DOM to show the selected duration filter. Use the provided input event
-            // 2. Invoke saveFiltersToLocalStorage here
+            document.getElementById("data").textContent = "";
+            filters.duration = event.target.value;
 
+            let filteredAdventures = filterFunction(adventures, filters);
+            addAdventureToDOM(filteredAdventures);
+            generateFilterPillsAndUpdateDOM(filters);
+            saveFiltersToLocalStorage(filters);
         }
 
         //executed when clear button is clicked on duration filter dropdown
         function clearDuration(event) {
-            // TODO: MODULE_FILTERS
-            // 1. Change the DOM to clear the Duration filter. Refer clearCategory() below
-            // 2. Invoke saveFiltersToLocalStorage here
+            document.getElementById("data").textContent = "";
+            filters.duration = "";
+            document.getElementById("duration-select").value = "";
 
+            let filteredAdventures = filterFunction(adventures, filters);
+            addAdventureToDOM(filteredAdventures);
+            saveFiltersToLocalStorage(filters);
         }
 
 
@@ -175,8 +181,7 @@
             let filteredAdventures = filterFunction(adventures, filters);
             addAdventureToDOM(filteredAdventures);
 
-            // TODO: MODULE_FILTERS
-            // 1. Invoke saveFiltersToLocalStorage here
+            saveFiltersToLocalStorage(filters);
         }
 
         //executed when clear button is clicked on category filter dropdown
@@ -188,8 +193,7 @@
             let filteredAdventures = filterFunction(adventures, filters);
             addAdventureToDOM(filteredAdventures);
 
-            // TODO: MODULE_FILTERS
-            // 1. Invoke saveFiltersToLocalStorage here
+            saveFiltersToLocalStorage(filters);
         }
 
         //helper function
