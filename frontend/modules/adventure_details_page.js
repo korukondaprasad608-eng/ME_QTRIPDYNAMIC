@@ -1,64 +1,80 @@
 import config from "../conf/index.js";
 
-//Implementation to extract adventure ID from query params
 function getAdventureIdFromURL(search) {
-  // TODO: MODULE_ADVENTURE_DETAILS
-  // 1. Get the Adventure Id from the URL
-
-
-  // Place holder for functionality to work in the Stubs
-  return null;
+  const params = new URLSearchParams(search);
+  return params.get("adventure");
 }
-//Implementation of fetch call with a paramterized input based on adventure ID
+
 async function fetchAdventureDetails(adventureId) {
-  // TODO: MODULE_ADVENTURE_DETAILS
-  // 1. Fetch the details of the adventure by making an API call
-
-
-  // Place holder for functionality to work in the Stubs
-  return null;
+  try {
+    const response = await fetch(
+      `${config.backendEndpoint}/adventures/detail?adventure=${adventureId}`
+    );
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching adventure details:", error);
+    return null;
+  }
 }
 
-//Implementation of DOM manipulation to add adventure details to DOM
 function addAdventureDetailsToDOM(adventure) {
-  // TODO: MODULE_ADVENTURE_DETAILS
-  // 1. Add the details of the adventure to the HTML DOM
+  if (!adventure) return;
 
+  document.getElementById("adventure-name").innerHTML = adventure.name;
+  document.getElementById("adventure-subtitle").innerHTML = adventure.subtitle;
+  document.getElementById("adventure-content").innerHTML = adventure.content;
+
+  const photoGallery = document.getElementById("photo-gallery");
+  photoGallery.innerHTML = "";
+
+  adventure.images.forEach((image) => {
+    const imageContainer = document.createElement("div");
+    imageContainer.className = "col-12 col-md-6";
+
+    const img = document.createElement("img");
+    img.src = image;
+    img.className = "activity-card-image img-fluid";
+    img.alt = adventure.name;
+
+    imageContainer.appendChild(img);
+    photoGallery.appendChild(imageContainer);
+  });
 }
 
-//Implementation of bootstrap gallery component
 function addBootstrapPhotoGallery(images) {
-  // TODO: MODULE_ADVENTURE_DETAILS
-  // 1. Add the bootstrap carousel to show the Adventure images
+  const photoGallery = document.getElementById("photo-gallery");
 
+  photoGallery.innerHTML = `
+    <div id="adventureCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        ${images.map((image, index) => `
+          <div class="carousel-item ${index === 0 ? "active" : ""}">
+            <img src="${image}" class="d-block w-100" alt="Adventure image">
+          </div>
+        `).join("")}
+      </div>
+      <button class="carousel-control-prev" type="button"
+        data-bs-target="#adventureCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button"
+        data-bs-target="#adventureCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+  `;
 }
 
-//Implementation of conditional rendering of DOM based on availability
 function conditionalRenderingOfReservationPanel(adventure) {
-  // TODO: MODULE_RESERVATIONS
-  // 1. If the adventure is already reserved, display the sold-out message.
-
 }
 
-//Implementation of reservation cost calculation based on persons
 function calculateReservationCostAndUpdateDOM(adventure, persons) {
-  // TODO: MODULE_RESERVATIONS
-  // 1. Calculate the cost based on number of persons and update the reservation-cost field
-
 }
 
-//Implementation of reservation form submission
 function captureFormSubmit(adventure) {
-  // TODO: MODULE_RESERVATIONS
-  // 1. Capture the query details and make a POST API call using fetch() to make the reservation
-  // 2. If the reservation is successful, show an alert with "Success!" and refresh the page. If the reservation fails, just show an alert with "Failed!".
 }
 
-//Implementation of success banner after reservation
 function showBannerIfAlreadyReserved(adventure) {
-  // TODO: MODULE_RESERVATIONS
-  // 1. If user has already reserved this adventure, show the reserved-banner, else don't
-
 }
 
 export {
